@@ -13,7 +13,13 @@ import { StyleSheet,
 
  const {height,width}= Dimensions.get('window')
 
+  
+
+
  class Layout extends React.Component {
+    static navigationOptions={
+        header: null
+      }
      render(){
          return(
              <ScrollView

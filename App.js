@@ -1,22 +1,26 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Layout from './Components/Layout';
+import LoginScreen2 from './Screens/LoginScreen2';
+import OtpScreen from './Screens/OtpScreen';
+import {createStackNavigator,createAppContainer} from 'react-navigation';
 
-export default class App extends React.Component {
+
+
+
+
+class App extends React.Component {
   render() {
     return (
-      <View >
-       <Layout/>
-      </View>
+      <AppStackNavigator></AppStackNavigator>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#C1DDF0',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const AppStackNavigator = createStackNavigator({
+  
+  Dashboard: Layout,
+  Login: LoginScreen2,
+  Otp:OtpScreen
+})
+export default createAppContainer(AppStackNavigator);
