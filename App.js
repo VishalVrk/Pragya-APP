@@ -18,9 +18,11 @@ class App extends React.Component {
 }
 
 const AppStackNavigator = createStackNavigator({
-  
+
   Dashboard: Layout,
   Login: LoginScreen2,
-  Otp:OtpScreen
+  Otp:OtpScreen,
+},{
+  initialRouteName: 'Login',
 })
 export default createAppContainer(AppStackNavigator);

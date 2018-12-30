@@ -10,6 +10,7 @@ TouchableOpacity } from 'react-native';
 import bgImage from '../assets/background.jpg';
 import logo from '../assets/logo.png';
 import Icon from 'react-native-vector-icons/Ionicons';
+import App from '../App';
  const {width: WIDTH} = Dimensions.get('window')
  export default class LoginScreen2 extends Component {
    constructor()
@@ -53,16 +54,16 @@ import Icon from 'react-native-vector-icons/Ionicons';
       </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.btnLogin}>
+      <TouchableOpacity style={styles.btnLogin} onPress={()=>{this.props.navigation.navigate('Otp');}}>
         <Text style={styles.text}>Login</Text>
       </TouchableOpacity>
 
-     
+
       </ImageBackground>
      );
    }
  }
- 
+
  const styles = StyleSheet.create({
     backgroundContainer:{
 
@@ -74,7 +75,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
     },
 
     logo:{
-      
+
         width:120,
         height:120
 
@@ -84,7 +85,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
       alignItems:'center',
       marginBottom: 50
     },
-    
+
     logoText:{
       color:'white',
       fontSize:20,
@@ -141,5 +142,3 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
     }
  });
-
- 
