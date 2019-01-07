@@ -8,21 +8,40 @@ TouchableOpacity } from 'react-native';
 import App from '../App';
 const {width: WIDTH} = Dimensions.get('window')
 export default class OtpScreen extends Component {
+  constructor(props) {
+       super(props);
 
+       this.state = {
+         otp:""
+       };
+     }
  static navigationOptions={
    header: null
  }
   render() {
+    function otpCheck(otp,number,obj){
+      fetch('https://control.msg91.com/api/verifyRequestOTP.php?authkey=240886A8aUQwX2ak5bb4c117&mobile=' + number + '&otp='+otp, {
+      method: 'POST',
+      "async": true,
+      "crossDomain": true,
+      headers: {},
+
+      }).then(response => response.json())
+      .then(data =>{
+        if(data.type==='success'){
+          obj.props.navigation.navigate('Home',{number:number,});
+        }
+      });
+    }
+    const { navigation } = this.props;
+    const number = navigation.getParam('number', 'err number');
     return (
      <View style={styles.backgroundContainer}>
      <View style={styles.inputContainer}>
      {/*Text input you have to convert it into otp place */}
-       <TextInput keyboardType={'number-pad'} maxLength={1} style={styles.input} underlineColorAndroid='transparent'/>
-       <TextInput keyboardType={'number-pad'} maxLength={1} style={styles.input} underlineColorAndroid='transparent'/>
-       <TextInput keyboardType={'number-pad'} maxLength={1} style={styles.input} underlineColorAndroid='transparent'/>
-       <TextInput keyboardType={'number-pad'} maxLength={1} style={styles.input} underlineColorAndroid='transparent'/>
+       <TextInput style={{height:100}} placeholder='enter OTP' onChangeText={(text)=> this.setState({otp: text})}></TextInput>
      </View>
-     <TouchableOpacity style={styles.btnLogin} onPress={()=>{this.props.navigation.navigate('Dashboard')}}>
+     <TouchableOpacity style={styles.btnLogin} onPress={()=>{otpCheck(this.state.otp,number,this);}}>
        <Text style={styles.text}>Login</Text>
      </TouchableOpacity>
      <View style={{paddingTop:10}}>

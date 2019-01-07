@@ -13,12 +13,17 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import App from '../App';
  const {width: WIDTH} = Dimensions.get('window')
  export default class LoginScreen2 extends Component {
+
    constructor()
    {
      super()
      this.state={
        showPass: true,
-       press: false
+       press: false,
+       data:{},
+       isLoading:true,
+       num_input:true,
+       number:""
      }
    }
 
@@ -35,7 +40,24 @@ import App from '../App';
     header: null
   }
    render() {
+     function otpsend(number,obj) {
+  fetch('http://control.msg91.com/api/sendotp.php?authkey=240886A8aUQwX2ak5bb4c117&sender=SESLTD&mobile='+number, {
+  method: 'POST',
+  "async": true,
+  "crossDomain": true,
+  headers: {},
+
+  }).then(response => response.json())
+  .then(data =>{
+    if(data.type==='success'){
+      obj.props.navigation.navigate('Otp',{number:number,});
+    }
+  });
+
+}
+      if (this.state.num_input) {
      return (
+
       <ImageBackground source={bgImage} style={styles.backgroundContainer}>
       <View style={styles.logoContainer}>
       <Image  source={logo} style={styles.logo}/>
@@ -43,18 +65,14 @@ import App from '../App';
       </View>
       <View style={styles.inputContainer}>
       <Icon name={ 'ios-contact' } size={28} color={'rgba(255,255,255,0.7)'}style={styles.inputIcon}/>
-        <TextInput  style={styles.input} placeholder={'Username / Telephone Number'} placeholderTextColor={'rgba(255,255,255,0.7)'} underlineColorAndroid='transparent'/>
-      </View>
-      <View style={styles.outputContainer}>
-      <Icon name={ 'ios-finger-print' } size={28} color={'rgba(255,255,255,0.7)'}style={styles.inputIcon}/>
-        <TextInput  style={styles.input} placeholder={'Password'} secureTextEntry={this.state.showPass} placeholderTextColor={'rgba(255,255,255,0.7)'} underlineColorAndroid='transparent'/>
-        <TouchableOpacity style={styles.btnEye}
-        onPress={this.showPass.bind(this)}>
-        <Icon name={this.state.press==false ? 'ios-eye': 'ios-eye-off'} size={26} color={'rgba(255,255,255,0.7)'}/>
-      </TouchableOpacity>
+        <TextInput  style={styles.input} placeholder={'Username / Telephone Number'} onChangeText={(text) => this.setState({number:text})} placeholderTextColor={'rgba(255,255,255,0.7)'} underlineColorAndroid='transparent'/>
       </View>
 
-      <TouchableOpacity style={styles.btnLogin} onPress={()=>{this.props.navigation.navigate('Otp');}}>
+
+      <TouchableOpacity style={styles.btnLogin} onPress={()=>{
+            this.setState({num_input:false});
+            otpsend(this.state.number,this);
+          }}>
         <Text style={styles.text}>Login</Text>
       </TouchableOpacity>
 
@@ -62,6 +80,11 @@ import App from '../App';
       </ImageBackground>
      );
    }
+     if (this.state.isLoading) {
+  return <Text>Loading ...</Text>;
+  }
+   }
+
  }
 
  const styles = StyleSheet.create({

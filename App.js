@@ -19,7 +19,7 @@ class App extends React.Component {
 
 const AppStackNavigator = createStackNavigator({
 
-  Dashboard: Layout,
+  Home: Layout,
   Login: LoginScreen2,
   Otp:OtpScreen,
 },{
