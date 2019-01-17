@@ -1,26 +1,63 @@
 import React from 'react';
-import { StyleSheet, 
-    Text, 
+import { StyleSheet,
+    Text,
     View,
     ScrollView,
     Image,
     Dimensions
  } from 'react-native';
-
+import { Video } from 'expo';
+import VideoPlayer from '@expo/videoplayer';
  import Subjects from './Subjects';
 
  import Topics from './Topics';
 
  const {height,width}= Dimensions.get('window')
 
-  
+
 
 
  class Layout extends React.Component {
     static navigationOptions={
         header: null
       }
+      constructor(props) {
+     super(props);
+
+     this.state = {
+       data:{},
+       isLoading:true,
+       num_input:true,
+       number:""
+     };
+   }
      render(){
+       const { navigation } = this.props;
+       const number = navigation.getParam('number', 'err number');
+       if (this.state.num_input) {
+//   return(
+//     <View>
+//   <TextInput style={{height: 40}}
+//           placeholder="Type here your number"
+//           onChangeText={(text) => this.setState({number:text})}></TextInput>
+//           <RkButton onPress={()=>{
+
+//             otpsend(this.state.number,this);
+//
+            fetch('http://192.168.1.10:3000/login?number='+number)
+              .then(response => response.json())
+              .then(data =>{ this.setState({ "data":{data},isLoading:false});
+                              console.log(this.state.data.data.data.name);
+                              console.log(this.state.data.data.data.school);
+                            }).then(this.setState({num_input:false}));
+
+//           }}></RkButton>
+//         </View>
+// );
+}
+   if (this.state.isLoading) {
+  return <Text>Loading ...</Text>;
+}
          return(
              <ScrollView
              scrollEventThrottle={16}
@@ -31,7 +68,7 @@ import { StyleSheet,
              <ScrollView
              horizontal={true}
              showsHorizontalScrollIndicator={false}
-             
+
              >
 
              <Subjects
@@ -56,7 +93,7 @@ import { StyleSheet,
                      fontSize:24,
                      fontWeight:'700',
                      paddingHorizontal:10
-                    
+
                  }}>
                      Introducing Pragya learning app
                  </Text>
@@ -65,19 +102,19 @@ import { StyleSheet,
                  showsHorizontalScrollIndicator={false}
                  >
                  <View style ={{width: width-40, marginTop:20, height:200}}>
-                 <Image style ={{flex:1,height:null,width:null, resizeMode:'cover',borderRadius:5,borderWidth:1,borderColor:"#dddddd"}} 
+                 <Image style ={{flex:1,height:null,width:null, resizeMode:'cover',borderRadius:5,borderWidth:1,borderColor:"#dddddd"}}
                  source={require('../assets/physics.jpg')}
-                 ></Image>   
+                 ></Image>
                  </View>
                  <View style ={{width: width-40, marginTop:20, height:200}}>
-                 <Image style ={{flex:1,height:null,width:null, resizeMode:'cover',borderRadius:5,borderWidth:1,borderColor:"#dddddd"}} 
+                 <Image style ={{flex:1,height:null,width:null, resizeMode:'cover',borderRadius:5,borderWidth:1,borderColor:"#dddddd"}}
                  source={require('../assets/chemistry.jpg')}
-                 ></Image>   
+                 ></Image>
                  </View>
                  <View style ={{width: width-40, marginTop:20, height:200}}>
-                 <Image style ={{flex:1,height:null,width:null, resizeMode:'cover',borderRadius:5,borderWidth:1,borderColor:"#dddddd"}} 
+                 <Image style ={{flex:1,height:null,width:null, resizeMode:'cover',borderRadius:5,borderWidth:1,borderColor:"#dddddd"}}
                  source={require('../assets/maths.jpg')}
-                 ></Image>   
+                 ></Image>
                  </View>
                  </ScrollView>
                  <View style={{marginTop:40}}>
@@ -106,9 +143,33 @@ import { StyleSheet,
                             </View>
                                 </View>
                                      </View>
+                                     {/* <Video
+                          source={{ uri: this.state.data.data.data.url }}
+                          rate={1.0}
+                          volume={1.0}
+                          isMuted={false}
+                          resizeMode="cover"
+                          shouldPlay
+                          isLooping
+                          style={{ width: 360, height: 300 }}
+                        /> */}
+
+<VideoPlayer
+  videoProps={{
+    shouldPlay: true,
+    resizeMode: Video.RESIZE_MODE_CONTAIN,
+    source: {
+      uri: this.state.data.data.data.url,
+    },
+  }}
+  isPortrait={true}
+  playFromPositionMillis={0}
+/>
              </ScrollView>
-             
-             
+
+
+
+
          );
      }
  }
